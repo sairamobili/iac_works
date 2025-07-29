@@ -7,30 +7,25 @@ This Terraform module manages Azure Shared Image Gallery and images.
 - Supports sharing (including community gallery).
 
 ## Usage Example
+
+You can use the sample YAML file under `templates/shared_gallery.yml` as a reference for the input structure.
 ```hcl
-# Example using a local source
+# Example using a local source and YAML input
 module "shared_gallery" {
   source = "./modules/shared_gallery"
-  shared_gallery = [
-    {
-      name                = "gallery1"
-      resource_group_name = "rg1"
-      location            = "eastus"
-      description         = "Shared images."
-      sharing = {
-        permission = "Groups"
-      }
-      images = []
-    }
-  ]
+  shared_gallery = yamldecode(file("path/to/shared_gallery.yml"))
 }
 
-# Example using a remote git source
+# Example using Azure Repos and YAML input
 module "shared_gallery" {
-  source = "git::ssh://git@ssh.dev.azure.com/v3/iacworks/avd/avd//modules/shared_gallery?ref=master"
-  shared_gallery = [
-    # ...same as above...
-  ]
+  source = "git::ssh://git@ssh.dev.azure.com/v3/iacworks/azure_iac_modules/azure_iac_modules//modules/shared_gallery?ref=master"
+  shared_gallery = yamldecode(file("path/to/shared_gallery.yml"))
+}
+
+# Example using GitHub and YAML input
+module "shared_gallery" {
+  source = "git@github.com:hashicorp/example.git"
+  shared_gallery = yamldecode(file("path/to/shared_gallery.yml"))
 }
 ```
 

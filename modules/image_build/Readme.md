@@ -7,16 +7,6 @@ This folder contains Packer templates and scripts for building custom VM images 
 - Pipeline and script automation for image creation.
 
 ## Usage Example
-```hcl
-# Example using a local source
-module "image_build" {
-  source = "./modules/image_build"
-  # add variables here
-}
 
-# Example using a remote git source
-module "image_build" {
-  source = "git::ssh://git@ssh.dev.azure.com/v3/iacworks/avd/avd//modules/image_build?ref=master"
-  # add variables here
-}
+You can use the sample YAML file under `azdo-pipelines/packerbuild.yml` to create the packer avd images
 ```
