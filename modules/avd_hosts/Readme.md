@@ -8,35 +8,25 @@ This Terraform module provisions Windows virtual machines (session hosts) for Az
 - Supports custom images and host pool registration.
 
 ## Usage Example
+
+You can use the sample YAML file under `templates/avd_hosts.yml` as a reference for the input structure.
 ```hcl
-# Example using a local source
+# Example using a local source and YAML input
 module "avd_hosts" {
   source = "./modules/avd_hosts"
-  virtual_machines = [
-    {
-      name                = "vm1"
-      resource_group_name = "rg1"
-      location            = "eastus"
-      size                = "Standard_D2s_v3"
-      admin_username      = "azureuser"
-      count               = 1
-      nw_resource_group_name = "rg1"
-      nw_virual_network_name = "vnet1"
-      nw_subnet_name         = "subnet1"
-      os_disk = {
-        caching              = "ReadWrite"
-        storage_account_type = "Standard_LRS"
-      }
-    }
-  ]
+  virtual_machines = yamldecode(file("path/to/avd_hosts.yml"))
 }
 
-# Example using a remote git source
+# Example using Azure Repos and YAML input
 module "avd_hosts" {
-  source = "git::ssh://git@ssh.dev.azure.com/v3/iacworks/avd/avd//modules/avd_hosts?ref=master"
-  virtual_machines = [
-    # ...same as above...
-  ]
+  source = "git::ssh://git@ssh.dev.azure.com/v3/iacworks/azure_iac_modules/azure_iac_modules//modules/avd_hosts?ref=master"
+  virtual_machines = yamldecode(file("path/to/avd_hosts.yml"))
+}
+
+# Example using GitHub and YAML input
+module "avd_hosts" {
+  source = "git@github.com:hashicorp/example.git"
+  virtual_machines = yamldecode(file("path/to/avd_hosts.yml"))
 }
 ```
 

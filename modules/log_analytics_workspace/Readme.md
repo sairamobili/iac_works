@@ -8,27 +8,25 @@ This Terraform module creates an Azure Log Analytics Workspace with full support
 - Outputs all key attributes and secrets.
 
 ## Usage Example
+
+ You can use the sample YAML file under `templates/log_analytics_workspace.yml` as a reference for the input structure.
 ```hcl
+# Example using a local source and YAML input
 module "log_analytics_workspace" {
-  source              = "./modules/log_analytics_workspace"
-  name                = "example-law"
-  location            = "eastus"
-  resource_group_name = "example-rg"
-  sku                 = "PerGB2018"
-  # Optional parameters below
-  retention_in_days    = 30
-  daily_quota_gb       = null
-  internet_ingestion_enabled = null
-  internet_query_enabled     = null
-  reservation_capacity_in_gb_per_day = null
-  cmk_for_query_forced = null
-  allow_resource_only_permissions = null
-  local_authentication_disabled = null
-  tags = {
-    environment = "dev"
-  }
-  identity = null
-  timeouts = null
+  source = "./modules/log_analytics_workspace"
+  workspaces = yamldecode(file("path/to/log_analytics_workspace.yml"))
+}
+
+# Example using Azure Repos and YAML input
+module "log_analytics_workspace" {
+  source = "git::ssh://git@ssh.dev.azure.com/v3/iacworks/azure_iac_modules/azure_iac_modules//modules/log_analytics_workspace?ref=master"
+  workspaces = yamldecode(file("path/to/log_analytics_workspace.yml"))
+}
+
+# Example using GitHub and YAML input
+module "log_analytics_workspace" {
+  source = "git@github.com:hashicorp/example.git"
+  workspaces = yamldecode(file("path/to/log_analytics_workspace.yml"))
 }
 ```
 

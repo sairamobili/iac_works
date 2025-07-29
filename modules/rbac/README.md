@@ -14,34 +14,24 @@ This module assigns Azure RBAC roles to users, groups, or service principals on 
 
 ## Example Usage
 
+You can use the sample YAML file under `templates/rbac_assignments.yml` as a reference for the input structure.
 ```hcl
+# Example using a local source and YAML input
 module "rbac" {
   source = "./modules/rbac"
-  assignments = [
-    {
-      identity             = "user1@contoso.com"
-      identity_type        = "user"
-      role_definition_name = "Reader"
-      scope_type           = "resource_group"
-      scope_name           = "my-rg"
-    },
-    {
-      identity             = "MyGroup"
-      identity_type        = "group"
-      role_definition_name = "Contributor"
-      scope_type           = "subscription"
-      scope_name           = "<subscription_name>" # Not used, but required for structure
-    },
-    {
-      identity             = "my-app-sp"
-      identity_type        = "service_principal"
-      role_definition_name = "Owner"
-      scope_type           = "resource"
-      scope_name           = "my-vm"
-      resource_type        = "Microsoft.Compute/virtualMachines"
-      resource_group_name  = "my-rg"
-    }
-  ]
+  assignments = yamldecode(file("path/to/rbac_assignments.yml"))
+}
+
+# Example using Azure Repos and YAML input
+module "rbac" {
+  source = "git::ssh://git@ssh.dev.azure.com/v3/iacworks/azure_iac_modules/azure_iac_modules//modules/rbac?ref=master"
+  assignments = yamldecode(file("path/to/rbac_assignments.yml"))
+}
+
+# Example using GitHub and YAML input
+module "rbac" {
+  source = "git@github.com:hashicorp/example.git"
+  assignments = yamldecode(file("path/to/rbac_assignments.yml"))
 }
 ```
 

@@ -9,47 +9,25 @@ This Terraform module creates one or more Azure Virtual Desktop Scaling Plans wi
 - Outputs all scaling plan IDs and names for downstream use.
 
 ## Usage Example
+
+You can use the sample YAML file under `templates/auto_scaling_plans.yml` as a reference for the input structure.
 ```hcl
+# Example using a local source and YAML input
 module "auto_scaling_plan" {
   source = "./modules/auto_scaling_plan"
-  scaling_plans = [
-    {
-      name                = "example-scaling-plan"
-      resource_group_name = "rg-avd"
-      location            = "eastus"
-      time_zone           = "UTC"
-      host_pool_type      = "Pooled"
-      schedule = [
-        {
-          days_of_week                        = ["Monday", "Tuesday"]
-          ramp_up_start_time                  = "06:00"
-          ramp_up_load_balancing_algorithm    = "BreadthFirst"
-          ramp_up_minimum_hosts_percent       = 10
-          ramp_up_capacity_threshold_percent  = 20
-          peak_start_time                     = "09:00"
-          peak_load_balancing_algorithm       = "DepthFirst"
-          peak_minimum_hosts_percent          = 50
-          off_peak_start_time                 = "18:00"
-          off_peak_load_balancing_algorithm   = "BreadthFirst"
-          off_peak_minimum_hosts_percent      = 20
-          off_peak_capacity_threshold_percent = 10
-          ramp_down_start_time                = "22:00"
-          ramp_down_load_balancing_algorithm  = "DepthFirst"
-          ramp_down_minimum_hosts_percent     = 5
-          ramp_down_capacity_threshold_percent= 5
-        }
-      ]
-      host_pool_references = [
-        {
-          hostpool_id            = azurerm_virtual_desktop_host_pool.example.id
-          scaling_plan_enabled   = true
-        }
-      ]
-      tags = {
-        environment = "dev"
-      }
-    }
-  ]
+  scaling_plans = yamldecode(file("path/to/auto_scaling_plans.yml"))
+}
+
+# Example using Azure Repos and YAML input
+module "auto_scaling_plan" {
+  source = "git::ssh://git@ssh.dev.azure.com/v3/iacworks/azure_iac_modules/azure_iac_modules//modules/auto_scaling_plan?ref=master"
+  scaling_plans = yamldecode(file("path/to/auto_scaling_plans.yml"))
+}
+
+# Example using GitHub and YAML input
+module "auto_scaling_plan" {
+  source = "git@github.com:hashicorp/example.git"
+  scaling_plans = yamldecode(file("path/to/auto_scaling_plans.yml"))
 }
 ```
 

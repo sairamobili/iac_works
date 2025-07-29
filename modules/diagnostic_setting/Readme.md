@@ -8,38 +8,25 @@ This Terraform module configures Azure Monitor diagnostic settings for one or mo
 - Supports dynamic configuration of log and metric categories.
 
 ## Usage Example
+
+You can use the sample YAML file under `templates/diagnostic_setting.yml` as a reference for the input structure.
 ```hcl
-# Example using a local source
+# Example using a local source and YAML input
 module "diagnostic_setting" {
   source = "./modules/diagnostic_setting"
-
-  dianostic_settings = [
-    {
-      name                           = "example-diagnostics"
-      target_resource_id             = azurerm_resource.example.id
-      eventhub_name                  = "eventhub-name"
-      eventhub_authorization_rule_id = azurerm_eventhub_authorization_rule.example.id
-      log_analytics_workspace_id     = azurerm_log_analytics_workspace.example.id
-      stoage_account_id              = azurerm_storage_account.example.id
-      log_analytics_destination_type = "Dedicated"
-      patner_solution_id             = null
-      enabled_log = {
-        category       = "AuditEvent"
-        category_group = null
-      }
-      enabled_metric = {
-        category = "AllMetrics"
-      }
-    }
-  ]
+  diagnostic_settings = yamldecode(file("path/to/diagnostic_setting.yml"))
 }
 
-# Example using a remote git source
+# Example using Azure Repos and YAML input
 module "diagnostic_setting" {
-  source = "git::ssh://git@ssh.dev.azure.com/v3/iacworks/avd/avd//modules/diagnostic_setting?ref=master"
-  dianostic_settings = [
-    # ...same as above...
-  ]
+  source = "git::ssh://git@ssh.dev.azure.com/v3/iacworks/azure_iac_modules/azure_iac_modules//modules/diagnostic_setting?ref=master"
+  diagnostic_settings = yamldecode(file("path/to/diagnostic_setting.yml"))
+}
+
+# Example using GitHub and YAML input
+module "diagnostic_setting" {
+  source = "git@github.com:hashicorp/example.git"
+  diagnostic_settings = yamldecode(file("path/to/diagnostic_setting.yml"))
 }
 ```
 

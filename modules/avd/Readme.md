@@ -10,16 +10,23 @@ This Terraform module deploys Azure Virtual Desktop (AVD) resources using a YAML
 
 ## Usage Example
 
+You can use the sample YAML file under `templates/avd_config.yml` as a reference for the input structure.
 ```hcl
-# Example using a local source
+# Example using a local source and YAML input
 module "avd" {
   source   = "./modules/avd"
   avd_yaml = file("path/to/avd_config.yml")
 }
 
-# Example using a remote git source
+# Example using Azure Repos and YAML input
 module "avd" {
-  source = "git::ssh://git@ssh.dev.azure.com/v3/iacworks/avd/avd//modules/resource_group?ref=master"
+  source = "git::ssh://git@ssh.dev.azure.com/v3/iacworks/azure_iac_modules/azure_iac_modules//modules/avd?ref=master"
+  avd_yaml = file("path/to/avd_config.yml")
+}
+
+# Example using GitHub and YAML input
+module "avd" {
+  source = "git@github.com:hashicorp/example.git"
   avd_yaml = file("path/to/avd_config.yml")
 }
 ```

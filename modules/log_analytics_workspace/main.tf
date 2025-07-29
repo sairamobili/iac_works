@@ -1,9 +1,7 @@
 
 locals {
-  workspaces_map = {
-    for ws in var.workspaces :
-    "${ws.resource_group_name}-${ws.name}" => ws
-  }
+  log_analytics_config = yamldecode(var.workspaces)
+  workspaces_map = { for ws in try(local.log_analytics_config.workspaces, []) : "${ws.resource_group_name}-${ws.name}" => ws }
 }
 
 resource "azurerm_log_analytics_workspace" "this" {
