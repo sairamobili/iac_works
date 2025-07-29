@@ -16,7 +16,7 @@ steps:
   persistCredentials: true
   clean: true
   fetchDepth: 0
-  ref: main  # Ensure the pipeline checks out 'main' branch
+  
 
 - task: DownloadSecureFile@1
   name: sshkey
