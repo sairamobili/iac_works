@@ -1,0 +1,5 @@
+- name: rg-avd-si-01
+  location: South India
+  tags:
+    environment: "Production"
+    owner: "IT Department"

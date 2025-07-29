@@ -1,0 +1,10 @@
+
+# Diagnostic setting definition
+- name: diag-setting-avd                  # Required. Diagnostic setting name.
+  target_resource_id: ""                  # Required. Resource ID of the target Azure resource.
+  log_analytics_workspace_id: ""          # Optional. Log Analytics workspace ID.
+  enabled_log:                           # Optional. Log settings.
+    category: ""                         # Optional. Log category.
+    category_group: ""                   # Optional. Log category group.
+  enabled_metric:                        # Optional. Metric settings.
+    category: ""                         # Optional. Metric category.

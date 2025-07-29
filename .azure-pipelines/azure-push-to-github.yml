@@ -1,0 +1,56 @@
+trigger:
+  branches:
+    include:
+      - master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  GIT_AUTHOR_NAME: 'Azure DevOps Pipeline'
+  GIT_AUTHOR_EMAIL: 'workwithme@saiobili.com'
+  GITHUB_REPO: 'sairamobili/iac_works'  # no “.git” here; we add it in the remote URL
+
+steps:
+- checkout: self
+  persistCredentials: true
+  clean: true
+  fetchDepth: 0
+
+- task: DownloadSecureFile@1
+  name: sshkey
+  inputs:
+    secureFile: 'myado'
+
+- script: |
+    eval "$(ssh-agent -s)"
+    mkdir -p ~/.ssh
+    ssh-add $(sshkey.secureFilePath)
+    ssh-keyscan github.com >> ~/.ssh/known_hosts
+  displayName: 'Install SSH key'
+
+- script: |
+    git config --global user.name  "$GIT_AUTHOR_NAME"
+    git config --global user.email "$GIT_AUTHOR_EMAIL"
+    git remote add github git@github.com:$GITHUB_REPO.git
+    git push --force  github refs/heads/master:refs/heads/main
+  displayName: 'Push master → main on GitHub'
+
+- script: |
+    echo "##[section]Changes in this commit were pushed from Azure Repos via Azure Pipeline."
+  displayName: 'Annotate commit source'
+
+- script: |
+    echo "##[section]Cleaning up SSH keys and agent…"
+    # Remove all identities from ssh-agent
+    ssh-add -D || true
+
+    # Kill the ssh-agent
+    eval "$(ssh-agent -k)" || true
+
+    # Remove the secure file copy and the entire SSH directory
+    rm -f "$(sshkey.secureFilePath)" || true
+    rm -rf ~/.ssh || true
+
+    echo "##[section]Cleanup complete."
+  displayName: 'Cleanup SSH keys'

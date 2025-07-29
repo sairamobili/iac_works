@@ -1,0 +1,18 @@
+- name: avd-shrd-prd
+  resource_group_name: rg-avd-si-01
+  location: centralindia
+  size: Standard_D2s_v3
+  admin_username: avdadmin
+  admin_password: avd@12345K$5
+  count: 3
+  nw_resource_group_name: rg-avdnw-si-01
+  nw_virual_network_name: vnet-avdnw-si-01
+  nw_subnet_name: subnet-avdnw-si-01
+  os_disk:
+    cahing: ReadWrite
+    storage_account_type: Standard_LRS
+  source_image_id: "/subscriptions/5683bf24-29eb-4665-a4aa-1f2e5f6e28a2/resourceGroups/rg-sig-si-01/providers/Microsoft.Compute/galleries/sigavdci01/images/avd-prod/versions/1.1.0"
+  timezone: "India Standard Time"
+  host_pool_resource_group_name: rg-avd-si-01
+  host_pool_name: avd-hostpool-si-01
+  

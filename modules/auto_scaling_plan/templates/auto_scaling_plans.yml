@@ -1,0 +1,32 @@
+# Example input YAML for auto scaling plan module (matches current main.tf and variables.tf)
+scaling_plans:
+  - name: "example-scaling-plan"
+    resource_group_name: "example-rg"
+    location: "eastus"
+    time_zone: "UTC"
+    description: "Example scaling plan"
+    exclusion_tag: null
+    tags:
+      environment: "dev"
+    schedules:
+      - name: "weekday-schedule"
+        days_of_week: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+        ramp_up_start_time: "06:00"
+        ramp_up_load_balancing_algorithm: "BreadthFirst"
+        ramp_up_minimum_hosts_percent: 10
+        ramp_up_capacity_threshold_percent: 80
+        peak_start_time: "09:00"
+        peak_load_balancing_algorithm: "DepthFirst"
+        ramp_down_start_time: "18:00"
+        ramp_down_load_balancing_algorithm: "BreadthFirst"
+        ramp_down_minimum_hosts_percent: 10
+        ramp_down_capacity_threshold_percent: 20
+        ramp_down_force_logoff_users: true
+        ramp_down_wait_time_minutes: 15
+        ramp_down_notification_message: "Logging off soon."
+        ramp_down_stop_hosts_when: "ZeroSessions"
+        off_peak_start_time: "20:00"
+        off_peak_load_balancing_algorithm: "DepthFirst"
+    host_pool:
+      - hostpool_id: "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/example-rg/providers/Microsoft.DesktopVirtualization/hostPools/example-hostpool"
+        scaling_plan_enabled: true

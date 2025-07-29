@@ -1,0 +1,14 @@
+# Shared Image Gallery definition
+- name: sig-avd-si-01                        # Required. Gallery name.
+  resource_group_name: rg-avd-si-01          # Required. Resource group name.
+  location: "central India"                  # Required. Azure region.
+  sharing:                                   # Optional. Sharing configuration.
+    permission: Private                      # Required if sharing is set. Permission type (e.g., Private, Groups).
+  images:                                    # Optional. List of images.
+    - name: "avd-prod"                       # Required. Image name.
+      os_type: Windows                       # Required. OS type (e.g., Windows, Linux).
+      hyperv_generation: V2                  # Optional. Hyper-V generation (e.g., V1, V2).
+      identifier:                            # Required. Image identifier.
+        offer: "windows-11"                  # Required. Offer name.
+        publisher: "microsoftwindowsdesktop" # Required. Publisher name.
+        sku: "win11-24h2-avd"                # Required. SKU name.

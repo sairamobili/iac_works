@@ -1,0 +1,54 @@
+
+# Host Pools
+host_pools:
+  - name: avd-hostpool-si-01                # Required. Host pool name.
+    location: "central India"                # Required. Azure region.
+    resource_group_name: rg-avd-si-01        # Required. Resource group name.
+    type: Pooled                            # Required. Host pool type (Pooled/Personal).
+    load_balancer_type: BreadthFirst         # Optional. Load balancer type.
+    friendly_name: "avd-hostpool-si-01"     # Optional. Friendly display name.
+    description: "Azure Virtual Desktop Host Pool for south India" # Optional.
+    maximum_sessions_allowed: 10             # Optional. Max sessions per host.
+    rotation_days: 24                        # Optional. Rotation days for hosts.
+    custom_rdp_properties: "..."             # Optional. Custom RDP properties string.
+    scheduled_agent_updates:                 # Optional. Agent update schedule.
+      enabled: true
+      timezone: "UTC"
+      schedule:
+        - day_of_week: Monday
+          hour_of_day: 2
+        - day_of_week: Friday
+          hour_of_day: 3
+
+# Workspaces
+workspaces:
+  - name: avd-workspace-si-01                # Required. Workspace name.
+    resource_group_name: rg-avd-si-01        # Required. Resource group name.
+    location: "central India"                # Required. Azure region.
+    friendly_name: "avd-workspace-si-01"     # Optional. Friendly display name.
+    description: "Workspace for AVD Host Pool in South India" # Optional.
+    public_network_access_enabled: true      # Optional. Enable public network access.
+
+# Application Groups
+application_groups:
+  - name: avd-app-group-si-01                # Required. App group name.
+    resource_group_name: rg-avd-si-01        # Required. Resource group name.
+    location: "central India"                # Required. Azure region.
+    type: Desktop                            # Required. Type: Desktop or RemoteApp.
+    host_pool_name: avd-hostpool-si-01       # Required. Associated host pool name.
+    friendly_name: "avd-app-group-si-01"     # Optional. Friendly display name.
+    description: "Application Group for AVD Host Pool in South India" # Optional.
+  - name: avd-app-group-si-02
+    resource_group_name: rg-avd-si-01
+    location: "central India"
+    type: RemoteApp
+    host_pool_name: avd-hostpool-si-01
+    friendly_name: "avd-app-group-si-02"
+    description: "Application Group for AVD Host Pool in South India"
+
+# Associations
+associations:
+  - workspace: "avd-workspace-si-01"         # Required. Workspace name to associate.
+    application_groups:                       # Required. List of application group names.
+      - avd-app-group-si-01
+      - avd-app-group-si-02
