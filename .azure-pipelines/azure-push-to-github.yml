@@ -17,17 +17,12 @@ steps:
     clean: true
     fetchDepth: 0
 
-  - task: DownloadSecureFile@1
-    name: sshkey
+  - task: InstallSSHKey@0
+    displayName: 'Install SSH key for GitHub push'
     inputs:
-      secureFile: 'myado'
-
-  - script: |
-      eval "$(ssh-agent -s)"
-      mkdir -p ~/.ssh
-      ssh-add $(sshkey.secureFilePath)
-      ssh-keyscan github.com >> ~/.ssh/known_hosts
-    displayName: 'Install SSH key'
+      sshPublicKey: ''
+      sshKeySecureFile: 'myado'
+      knownHostsEntry: 'github.com'
 
   - script: |
       echo "Verifying local Git state..."
@@ -47,11 +42,4 @@ steps:
       echo "##[section]Changes in this commit were pushed from Azure Repos via Azure Pipeline."
     displayName: 'Annotate commit source'
 
-  - script: |
-      echo "##[section]Cleaning up SSH keys and agent…"
-      ssh-add -D || true
-      eval "$(ssh-agent -k)" || true
-      rm -f "$(sshkey.secureFilePath)" || true
-      rm -rf ~/.ssh || true
-      echo "##[section]Cleanup complete."
-    displayName: 'Cleanup SSH keys'
+  # SSH key cleanup is handled automatically by InstallSSHKey@0
